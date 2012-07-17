@@ -102,19 +102,7 @@ class Model
     public function setTemplate()
     {
     	// template base
-    	$this->data["template"] = "pages/{$this->source}/";
-
-    	// Let's just kill everything for now if we don't have results
-    	// When you get back, Jen, let's figure out who calls this method
-    	// and see if this is appropriate here or somewhere else
-    	if (!isset($this->data["results"])) {
-    		$errorMsg = "No results returned.";
-    		if ($this->router->debug()) { 
-    			$errorMsg .= "<br><pre>" . __METHOD__ . "()<br>" . __FILE__ . ":" . __LINE__ . "</pre>"; 
-    		};
-    		$this->router->halt(404, $errorMsg);
-    	}
-    	// Add ons
+    	$this->data["template"] = "{$this->data["object"]}/{$this->source}/";
 
     	// single article
     	if (isset($this->slug)) {
