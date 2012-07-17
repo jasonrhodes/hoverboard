@@ -81,7 +81,11 @@ class Model
 
 		// HTTP worker set up
 		$this->http = new HTTP(new Resty());
-		$this->http->setBaseURL("http://local.api.hub.jhu.edu/");
+
+		// This REALLY needs to be pulled into a Dependency Injection thingy
+		if (defined("API_URL")) {
+			$this->http->setBaseURL(API_URL);
+		}
 	}
 
 	/**
