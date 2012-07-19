@@ -133,7 +133,10 @@ class Model
 
     	// static page
     	elseif (isset($this->page)) {
-    		$this->data["template"] .= "page";
+    		if (isset($this->page_info["type"])) {
+    			$this->data["template"] .= $this->page_info["type"];
+    		}
+    		
     	}
 
     	// collection of articles
