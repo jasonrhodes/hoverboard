@@ -1,7 +1,7 @@
 <?php
 
 namespace hoverboard\workers;
-use \PHPassLib\Hash\Bcrypt;
+use \Phpass\Hash as Bcrypt;
 
 class Hash
 {
@@ -9,12 +9,12 @@ class Hash
 	
 	public static function create($password)
 	{
-		return static::getHasher()->hash($password);
+		return static::getHasher()->hashPassword($password);
 	}
 
 	public static function verify($password, $hash)
 	{
-		return static::getHasher()->verify($password, $hash);
+		return static::getHasher()->checkPassword($password, $hash);
 	}
 
 	protected static function getHasher()
