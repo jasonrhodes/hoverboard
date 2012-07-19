@@ -32,8 +32,8 @@ class ExceptionHandler
 
     public function handle(\Exception $e)
     {
-        echo "<div style='border-top: 1px solid black; padding: 20px 0;'>";
-        echo "<div style='width: 800px; margin: 0 auto; font-size: 20px;'>";
+        echo "<div style='padding: 20px 40px;'>";
+        echo "<div style='font-size: 20px; font-family: Myriad Pro, Helvetica, sans-serif;'>";
         
         echo "<h2>Uh oh, the site did something bad.</h2>";
         echo "<p>Exception message: " . $e->getMessage() . "</p>";
