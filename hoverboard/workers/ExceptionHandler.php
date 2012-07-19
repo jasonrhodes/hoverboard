@@ -42,12 +42,15 @@ class ExceptionHandler
         echo "<h5>Stack Trace</h5>";
         
         echo "<ul style='list-style: none;'>";
-        $liformat = "<li style='margin-bottom:0.8em;'>%s:%s<br>%s<br><span style='color: #ccc;'>%s</span></li>";
-        printf($liformat, $this->getFileName($e->getFile()), $e->getLine(), "\"" . $e->getMessage() . "\"", $e->getFile());
-        foreach ($e->getTrace() as $step) {
+        $liformat = "<li style='margin-bottom:0.8em;'><span style='font-size: 14px; font-weight: bold; color: red;'>%s</span><br>%s:%s<br>%s<br><span style='color: #ccc;'>%s</span></li>";
+        printf($liformat, "[exception thrown]", $this->getFileName($e->getFile()), $e->getLine(), "\"" . $e->getMessage() . "\"", $e->getFile());
+        $trace = $e->getTrace();
+        $stepCount = count($trace);
+        foreach ($trace as $step) {
             extract($step);
             $args = (isset($args) && is_array($args) && !empty($args)) ? implode(", ", $args) : "";
-            printf($liformat, $this->getFileName($file), $line, $function . "(" . $args . ")", $file);
+            printf($liformat, "[step " . $stepCount . "]", $this->getFileName($file), $line, $function . "(" . $args . ")", $file);
+            $stepCount--;
         }
         echo "</ul>";
 
@@ -57,13 +60,6 @@ class ExceptionHandler
     protected function getFileName($filePath)
     {
         return array_pop(explode("/", $filePath));
-    }
-
-    protected function getTrace($trace)
-    {
-        print_r($trace[0]);
-        // print_r($trace[0]["args"][0]); die();
-        return $trace[0]["args"][0]->getTrace();
     }
 
 }
