@@ -35,8 +35,9 @@ class ExceptionHandler
         echo "<div style='border-top: 1px solid black; padding: 20px 0;'>";
         echo "<div style='width: 800px; margin: 0 auto; font-size: 20px;'>";
         
-        echo "<h2>Ta da! You got an EXCEPTION!</h2>";
-        echo "<p>" . $e->getMessage() . "</p>";
+        echo "<h2>Uh oh, the site did something bad.</h2>";
+        echo "<p>Exception message: " . $e->getMessage() . "</p>";
+        echo "<h5>Stack Trace</h5>";
         echo "<pre>" . print_r(debug_backtrace(), true) . "</pre>";
 
         echo "</div></div>";
