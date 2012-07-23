@@ -22,7 +22,8 @@ class HTTP
 	 */
 	public function __call($method, $args)
 	{
-		return call_user_func_array(array($this->engine, $method), $args);
+		$returned = call_user_func_array(array($this->engine, $method), $args);
+		return !is_null($returned) ? $returned : $this;
 	}
 
 
@@ -50,11 +51,13 @@ class HTTP
 		}
 		$this->requestCacheKey = md5($cacheKey);
 
+		// apc_delete($this->requestCacheKey);
+		
 		if ($cached = $this->requestIsCached()) {
 			$this->response = $cached;
 		} else {
 			$this->response = $this->engine->get($this->request);
-			$this->cache($this->response);
+			// $this->cache($this->response);
 		}
 
 		return $this->response;
