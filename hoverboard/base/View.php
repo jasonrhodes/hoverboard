@@ -18,6 +18,8 @@ class View
 
     protected static $model;
 
+    protected static $log;
+
 
     /**
      * @param object $engine The template engine object to use
@@ -31,6 +33,11 @@ class View
     public static function setModel(Model $model)
     {
         static::$model = $model;
+    }
+
+    public static function setLogger(Logger $logger)
+    {
+        static::$log = $logger;
     }
 
 
