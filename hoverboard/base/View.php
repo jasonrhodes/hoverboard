@@ -39,6 +39,7 @@ class View
      */
     public static function render($template, $data = array())
     {
+        $data = (array) $data;
         if (isset(static::$model->data) && is_array(static::$model->data)) {
             $data += static::$model->data;
         }
