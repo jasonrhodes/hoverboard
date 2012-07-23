@@ -5,6 +5,7 @@ use \hoverboard\adapters\interfaces\TemplateEngine;
 use \hoverboard\workers\Messages;
 use \hoverboard\workers\Session;
 use \hoverboard\workers\Router;
+use \hoverboard\workers\Logger;
 
 class View
 {

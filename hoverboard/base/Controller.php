@@ -2,7 +2,8 @@
 
 namespace hoverboard\base;
 use \hoverboard\base\View;
-use \hoverboard\workers;
+use \hoverboard\workers\Router;
+use \hoverboard\workers\Logger;
 
 class Controller
 {
@@ -15,17 +16,17 @@ class Controller
 
 	public function __construct($action, $options)
 	{
-		$this->router = workers\Router::getInstance();
+		$this->router = Router::getInstance();
 		$this->id = isset($options["id"]) ? $options["id"] : null;
 
-		$this->log = workers\Logger::getInstance();
+		$this->log = Logger::getInstance();
 
 		$this->objectName = str_replace("app\controllers\\", "", substr(get_called_class(), 0, -10));
 		$modelName = "\app\models\\" . $this->objectName;
 		$this->model = new $modelName($options);
 		View::setModel($this->model);
 		View::setLogger($this->log);
-		
+
 		$action = $action ? $action : "index";
 
 		$this->$action();
