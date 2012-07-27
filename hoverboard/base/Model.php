@@ -99,53 +99,6 @@ class Model
 	}
 
 	/**
-     * Based on the options passed from the router, figure out which
-     * template to use.
-     *
-     */
-    public function setTemplate()
-    {
-    	// template base
-    	$this->data["template"] = "{$this->data["object"]}/{$this->source}/";
-
-    	// single article
-    	if (isset($this->slug)) {
-
-    		// if magazine
-    		if ($this->source == "magazine") {
-
-    			$department = $this->data["results"]["magazine"]->department->machine_name;
-
-    			if ($department) {
-    				$this->data["template"] .= "sub/" . $department;
-    			}
-    			else {
-    				// log this
-    				$this->data["template"] .= "single";
-    			}
-    		}
-
-    		// gazette, hub
-    		else {
-    			$this->data["template"] .= "single";
-    		}
-    	}
-
-    	// static page
-    	elseif (isset($this->page)) {
-    		if (isset($this->page_info["type"])) {
-    			$this->data["template"] .= $this->page_info["type"];
-    		}
-    		
-    	}
-
-    	// collection of articles
-    	else {
-    		$this->data["template"] .= "collection";
-    	}
-    }
-
-	/**
 	 * Create a new record in this model's database table
 	 *
 	 * Uses PDO's prepare method to safely escape values.
