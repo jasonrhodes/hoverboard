@@ -5,6 +5,7 @@ use \hoverboard\adapters\interfaces\TemplateEngine;
 use \hoverboard\workers\Messages;
 use \hoverboard\workers\Session;
 use \hoverboard\workers\Router;
+use \hoverboard\workers\Logger;
 
 class View
 {
@@ -17,6 +18,8 @@ class View
 
 
     protected static $model;
+
+    protected static $log;
 
 
     /**
@@ -33,12 +36,18 @@ class View
         static::$model = $model;
     }
 
+    public static function setLogger(Logger $logger)
+    {
+        static::$log = $logger;
+    }
+
 
     /**
      * @param string $template The relative path/name of the template
      */
     public static function render($template, $data = array())
     {
+        $data = (array) $data;
         if (isset(static::$model->data) && is_array(static::$model->data)) {
             $data += static::$model->data;
         }

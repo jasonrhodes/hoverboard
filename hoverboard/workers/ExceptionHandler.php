@@ -25,6 +25,8 @@ namespace hoverboard\workers;
 
 class ExceptionHandler 
 {
+    protected $steps = array();
+
     public function __construct()
     {
         set_exception_handler(array($this, "handle"));
@@ -32,14 +34,32 @@ class ExceptionHandler
 
     public function handle(\Exception $e)
     {
-        echo "<div style='border-top: 1px solid black; padding: 20px 0;'>";
-        echo "<div style='width: 800px; margin: 0 auto; font-size: 20px;'>";
+        echo "<div style='padding: 20px 40px;'>";
+        echo "<div style='font-size: 20px; font-family: Myriad Pro, Helvetica, sans-serif;'>";
         
         echo "<h2>Uh oh, the site did something bad.</h2>";
         echo "<p>Exception message: " . $e->getMessage() . "</p>";
         echo "<h5>Stack Trace</h5>";
-        echo "<pre>" . print_r(debug_backtrace(), true) . "</pre>";
+        
+        echo "<ul style='list-style: none;'>";
+        $liformat = "<li style='margin-bottom:0.8em;'><span style='font-size: 14px; font-weight: bold; color: red;'>%s</span><br>%s:%s<br>%s<br><span style='color: #ccc;'>%s</span></li>";
+        printf($liformat, "[exception thrown]", $this->getFileName($e->getFile()), $e->getLine(), "\"" . $e->getMessage() . "\"", $e->getFile());
+        $trace = $e->getTrace();
+        $stepCount = count($trace);
+        foreach ($trace as $step) {
+            extract($step);
+            $args = (isset($args) && is_array($args) && !empty($args)) ? implode(", ", $args) : "";
+            printf($liformat, "[step " . $stepCount . "]", $this->getFileName($file), $line, $function . "(" . $args . ")", $file);
+            $stepCount--;
+        }
+        echo "</ul>";
 
         echo "</div></div>";
     }
+
+    protected function getFileName($filePath)
+    {
+        return array_pop(explode("/", $filePath));
+    }
+
 }

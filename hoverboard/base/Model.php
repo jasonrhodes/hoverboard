@@ -1,11 +1,12 @@
 <?php
 
 namespace hoverboard\base;
-use \hoverboard\workers\Database;
 use \PDO;
+use \hoverboard\workers\Database;
 use \hoverboard\workers\HTTP;
 use \hoverboard\workers\Router;
 use \hoverboard\workers\Messages;
+use \hoverboard\workers\Logger;
 use \Resty;
 
 class Model
@@ -52,6 +53,14 @@ class Model
 
 
 	/**
+	 * @var Logger $logger
+	 *
+	 * Logger singleton object stored here.
+	 */
+	protected $log;
+
+
+	/**
 	 * @var array $data
 	 *
 	 * Array where data is stored after database calls are made.
@@ -67,6 +76,9 @@ class Model
 	{
 		// Router set up
 		$this->router = Router::getInstance();
+
+		// Get logger instance
+		$this->log = Logger::getInstance();
 
 		foreach ($options as $key => $value) {
 			$this->$key = $value;

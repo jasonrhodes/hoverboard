@@ -7,7 +7,9 @@ class HTTP
 	protected $engine;
 	protected $endpoint;
 	protected $queryStringParams = array();
-	protected $lastResponse;
+	protected $request;
+	protected $requestCacheKey;
+	protected $response;
 
 	public function __construct($engine)
 	{
@@ -20,7 +22,8 @@ class HTTP
 	 */
 	public function __call($method, $args)
 	{
-		return call_user_func_array(array($this->engine, $method), $args);
+		$returned = call_user_func_array(array($this->engine, $method), $args);
+		return !is_null($returned) ? $returned : $this;
 	}
 
 
@@ -40,7 +43,42 @@ class HTTP
 
 	public function get()
 	{
-		return $this->lastResponse = $this->engine->get($this->endpoint . "?" . implode("&", $this->queryStringParams));
+		$this->request = $cacheKey = $this->endpoint;
+		if (!empty($this->queryStringParams)) {
+			$this->request .= "?" . implode("&", $this->queryStringParams);
+			asort($this->queryStringParams);
+			$cacheKey .= "?" . implode("&", $this->queryStringParams);
+		}
+		$this->requestCacheKey = md5($cacheKey);
+
+		// apc_delete($this->requestCacheKey);
+		
+		if ($cached = $this->requestIsCached()) {
+			$this->response = $cached;
+		} else {
+			$this->response = $this->engine->get($this->request);
+			// $this->cache($this->response);
+		}
+
+		return $this->response;
+	}
+
+
+	public function requestIsCached()
+	{
+		return apc_fetch($this->requestCacheKey);
+	}
+
+
+	public function cache($result)
+	{
+		return apc_store($this->requestCacheKey, $result, 10);
+	}
+
+
+	public function getLastResponse()
+	{
+		return $this->response;
 	}
 
 }
