@@ -49,16 +49,15 @@ class HTTP
 			asort($this->queryStringParams);
 			$cacheKey .= "?" . implode("&", $this->queryStringParams);
 		}
+
 		$this->requestCacheKey = md5($cacheKey);
 
-		// apc_delete($this->requestCacheKey);
-		
-		if ($cached = $this->requestIsCached()) {
+		$cached = $this->requestIsCached();
 
-			if (!is_object($cached) && substr($cached, 0, 5) == "<?xml") {
+		if ($cached !== false) {
+			if (is_string($cached) && !substr($cached, 0, 5) == "<?xml") {
 				$cached = simplexml_load_string($cached);
 			} 
-			
 			$this->response = $cached;
 
 		} else {
@@ -69,6 +68,7 @@ class HTTP
 			if (is_object($body) && get_class($body) == "SimpleXMLElement") {
 				$body = $body->asXML();
 			}
+
 			$this->cache($body);
 		}
 
