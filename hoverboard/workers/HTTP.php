@@ -65,10 +65,9 @@ class HTTP
 			$this->response = $this->engine->get($this->request);
 			$body = $this->response["body"];
 
-			if (is_object($cached) && get_class($body) == "SimpleXMLElement") {
+			if (is_object($body) && get_class($body) == "SimpleXMLElement") {
 				$body = $body->asXML();
 			}
-
 			$this->cache($body);
 		}
 
