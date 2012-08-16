@@ -4,6 +4,7 @@ namespace hoverboard\base;
 use \PDO;
 use \hoverboard\workers\Database;
 use \hoverboard\workers\HTTP;
+use \hoverboard\workers\Cache;
 use \hoverboard\workers\Router;
 use \hoverboard\workers\Messages;
 use \hoverboard\workers\Logger;
@@ -42,6 +43,14 @@ class Model
 	 * HTTP object stored here after it's created.
 	 */
 	protected $http;
+
+
+	/**
+	 * @var Cache $cache
+	 *
+	 * Cache object stored here after it's created.
+	 */
+	protected $cache;
 
 
 	/**
@@ -93,6 +102,9 @@ class Model
 
 		// HTTP worker set up
 		$this->http = new HTTP(new Resty());
+
+		// Cache worker set up
+		$this->cache = new Cache();
 
 		// This REALLY needs to be pulled into a Dependency Injection thingy
 		if (defined("API_URL")) {

@@ -63,12 +63,13 @@ class HTTP
 
 		} else {
 			$this->response = $this->engine->get($this->request);
-			$body = $this->response["body"];
+			$this->response = $this->response["body"];
+			$body = $this->response;
 
 			if (is_object($body) && get_class($body) == "SimpleXMLElement") {
 				$body = $body->asXML();
 			}
-			$this->cache($body);
+			// $this->cache($body);
 		}
 
 		return $this->response;
