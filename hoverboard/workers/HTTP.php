@@ -69,7 +69,7 @@ class HTTP
 			if (is_object($body) && get_class($body) == "SimpleXMLElement") {
 				$body = $body->asXML();
 			}
-			// $this->cache($body);
+			$this->cache($body);
 		}
 
 		return $this->response;
