@@ -54,10 +54,22 @@ class HTTP
 		// apc_delete($this->requestCacheKey);
 		
 		if ($cached = $this->requestIsCached()) {
+
+			if (!is_object($cached) && substr($cached, 0, 5) == "<?xml") {
+				$cached = simplexml_load_string($cached);
+			} 
+			
 			$this->response = $cached;
+
 		} else {
 			$this->response = $this->engine->get($this->request);
-			// $this->cache($this->response);
+			$body = $this->response["body"];
+
+			if (is_object($cached) && get_class($body) == "SimpleXMLElement") {
+				$body = $body->asXML();
+			}
+
+			$this->cache($body);
 		}
 
 		return $this->response;
@@ -72,7 +84,7 @@ class HTTP
 
 	public function cache($result)
 	{
-		return apc_store($this->requestCacheKey, $result, 10);
+		return apc_store($this->requestCacheKey, $result, 120);
 	}
 
 
