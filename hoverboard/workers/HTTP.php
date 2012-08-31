@@ -55,7 +55,7 @@ class HTTP
 		$cached = $this->requestIsCached();
 
 		if ($cached !== false) {
-			if (is_string($cached) && !substr($cached, 0, 5) == "<?xml") {
+			if (is_string($cached) && substr($cached, 0, 5) == "<?xml") {
 				$cached = simplexml_load_string($cached);
 			} 
 			$this->response = $cached;
