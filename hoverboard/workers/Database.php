@@ -39,7 +39,15 @@ class Database
 		}
 		else {
 			extract(static::$connections[$name]);
-			return new PDO($dsn, $username, $password);
+			try {
+				$pdo = new PDO($dsn, $username, $password);
+			} catch (\PDOException $e) {
+				$log = \hoverboard\workers\Logger::getInstance();
+				$log->addError("PDO connection for the manager db failed.", array("PDO Error Message" => $e->getMessage(), "environment" => ENVIRONMENT));
+
+				die("A database error has occurred.");
+			}
+			return $pdo;
 		}
 	}
 
