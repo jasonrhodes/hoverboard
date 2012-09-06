@@ -13,8 +13,13 @@ class GoogleSearchResult
 
 	public function __construct($xml)
 	{
+
+		if (!$xml || is_null($xml)) {
+			throw new \Exception("No value passed to the GoogleSearchResult constructor");
+		}
+		
 		if (!is_object($xml) || get_class($xml) !== "SimpleXMLElement") {
-			throw new Exception("Value passed to GoogleSearchResult constructor is not a SimpleXMLElement object as expected.");
+			throw new \Exception("Value passed to GoogleSearchResult constructor is not a SimpleXMLElement object as expected.");
 		}
 
 		$elementMap = array(
