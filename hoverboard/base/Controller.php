@@ -23,7 +23,7 @@ class Controller
 		$this->log = Logger::getInstance();
 
 		// Get Sentry logger instance
-		$this->sentry = Sentry::getInstance();
+		// $this->sentry = Sentry::getInstance();
 
 		$this->objectName = str_replace("app\controllers\\", "", substr(get_called_class(), 0, -10));
 		$modelName = "\app\models\\" . $this->objectName;
