@@ -32,8 +32,58 @@ class Sentry
 		throw new \Exception("There's no Sentry instance called {$name} (you need to run Sentry::init(\"{$name}\") to make it available.");
 	}
 
-	static public function setDebug($message)
+	/**
+     * Send a debug message
+     *
+     * @param string $message Message to record in Sentry.
+     * @param boolean $stack Whether to include a stacktrace in the log
+     */
+	static public function debug($message, $stack = true)
 	{
-		static::$client->captureMessage($message);
+		static::$client->captureMessage($message, array(), "debug", $stack);
+	}
+
+	/**
+     * Send an info message
+     *
+     * @param string $message Message to record in Sentry.
+     * @param boolean $stack Whether to include a stacktrace in the log
+     */
+	static public function info($message, $stack = true)
+	{
+		static::$client->captureMessage($message, array(), "info", $stack);
+	}
+
+	/**
+     * Send a warning message
+     *
+     * @param string $message Message to record in Sentry.
+     * @param boolean $stack Whether to include a stacktrace in the log
+     */
+	static public function warning($message, $stack = true)
+	{
+		static::$client->captureMessage($message, array(), "warning", $stack);
+	}
+
+	/**
+     * Send an error message
+     *
+     * @param string $message Message to record in Sentry.
+     * @param boolean $stack Whether to include a stacktrace in the log
+     */
+	static public function error($message, $stack = true)
+	{
+		static::$client->captureMessage($message, array(), "error", $stack);
+	}
+
+	/**
+     * Send a fatal error message
+     *
+     * @param string $message Message to record in Sentry.
+     * @param boolean $stack Whether to include a stacktrace in the log
+     */
+	static public function fatal($message, $stack = true)
+	{
+		static::$client->captureMessage($message, array(), "fatal", $stack);
 	}
 }

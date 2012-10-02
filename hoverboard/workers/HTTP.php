@@ -22,8 +22,16 @@ class HTTP
 	 */
 	public function __call($method, $args)
 	{
-		$returned = call_user_func_array(array($this->engine, $method), $args);
-		return !is_null($returned) ? $returned : $this;
+		if (substr($method, 0, 3) == "get") {
+			$property = lcfirst(substr($method, 3));
+			if (isset($this->$property)) {
+				return $this->$property;
+			}
+
+		} else {
+			$returned = call_user_func_array(array($this->engine, $method), $args);
+			return !is_null($returned) ? $returned : $this;
+		}
 	}
 
 

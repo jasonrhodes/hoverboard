@@ -91,7 +91,7 @@ class Model
 		$this->log = Logger::getInstance();
 
 		// Get Sentry logger instance
-		// $this->sentry = Sentry::getInstance();
+		$this->sentry = Sentry::getInstance();
 
 		foreach ($options as $key => $value) {
 			$this->$key = $value;
