@@ -4,6 +4,7 @@ namespace hoverboard\base;
 use \hoverboard\base\View;
 use \hoverboard\workers\Router;
 use \hoverboard\workers\Logger;
+use \hoverboard\workers\Sentry;
 
 class Controller
 {

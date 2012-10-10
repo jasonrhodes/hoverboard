@@ -22,8 +22,16 @@ class HTTP
 	 */
 	public function __call($method, $args)
 	{
-		$returned = call_user_func_array(array($this->engine, $method), $args);
-		return !is_null($returned) ? $returned : $this;
+		if (substr($method, 0, 3) == "get") {
+			$property = lcfirst(substr($method, 3));
+			if (isset($this->$property)) {
+				return $this->$property;
+			}
+
+		} else {
+			$returned = call_user_func_array(array($this->engine, $method), $args);
+			return !is_null($returned) ? $returned : $this;
+		}
 	}
 
 
@@ -55,7 +63,7 @@ class HTTP
 		$cached = $this->requestIsCached();
 
 		if ($cached !== false) {
-			if (is_string($cached) && !substr($cached, 0, 5) == "<?xml") {
+			if (is_string($cached) && substr($cached, 0, 5) == "<?xml") {
 				$cached = simplexml_load_string($cached);
 			} 
 			$this->response = $cached;
