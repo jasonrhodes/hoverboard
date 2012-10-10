@@ -21,8 +21,11 @@ class Controller
 
 		$this->log = Logger::getInstance();
 
-		$this->objectName = str_replace("app\controllers\\", "", substr(get_called_class(), 0, -10));
-		$modelName = "\app\models\\" . $this->objectName;
+		// Get Sentry logger instance
+		// $this->sentry = Sentry::getInstance();
+
+		$this->objectName = str_replace("storefront\\app\\controllers\\", "", substr(get_called_class(), 0, -10));
+		$modelName = "\\storefront\\app\\models\\" . $this->objectName;
 		$this->model = new $modelName($options);
 		View::setModel($this->model);
 		View::setLogger($this->log);
