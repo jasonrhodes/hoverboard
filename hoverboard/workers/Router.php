@@ -32,9 +32,16 @@ class Router
 	{
 		extract($options);
 		$this->engine = $engine;
+		$this->appDir = "";
+
+		if (isset($appDir)) {
+			$this->appDir = $appDir;
+		} elseif (defined("APP_DIR")) {
+			$this->appDir = APP_DIR;
+		} 
 
 		// Set default routes path
-		$this->setRoutesPath(APP_DIR . "/config/routes.php");
+		$this->setRoutesPath($this->appDir . "/config/routes.php");
 
 		if (isset($routesPath) && file_exists($routesPath)) {
 			$this->routesPath = $routesPath;
@@ -89,7 +96,7 @@ class Router
 
 	public function dispatch($controller, $action = null, $options = array() )
 	{
-		$controllerName = "\app\controllers\\" . ucwords($controller) . "Controller";
+		$controllerName = "\\storefront\\app\\controllers\\" . ucwords($controller) . "Controller";
 		new $controllerName($action, $options, $this);
 	}
 
