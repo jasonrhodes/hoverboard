@@ -8,47 +8,60 @@ class DrupalDataMiner
 	{
 		$diamonds = array();
 
-		print_r($data); die();
-
 		foreach ($data as $node) {
 			$diamond = new \stdClass;
-
-			print_r($node); die();
-
 			foreach ($node as $key => $value) {
 				$diamond->$key = $this->extract($value);
 			}
-
 			$diamonds[] = $diamond;
 		}
-
-		print_r($diamonds); die();
 		
 		return $diamonds;
 	}
 
-	/**
-     * Quick extraction of the standard Drupal nested array
-     *
-     * @param array $value
-     * @param string $label (optional) defaults to "safe_value"
-     *
-     */
-    protected function extract($value, $label = "safe_value") 
+    protected function extract($value)
     {
+    	// text field labels we want to grab in order of precedence
+    	$textLabels = array("safe_value", "value", "target_id");
+    	$termLabel = "tid";
+    	$fileLabel = "fid";
+
     	if (!is_array($value)) {
     		return $value;
     	}
 
-		if (!isset($value["und"]) || !isset($value["und"][0][$label])) {
-            return $value;
-        }
+		// get inside the "und" array where all the goods are
+		$value = $value["und"];
 
-        if (isset($value["und"][0])) {
-            return $value["und"][0][$label];
-        }
-        else {
-            return $value["und"][$label];
-        }
+		// text field
+		if (count($value == 1) && !isset($value[0][$fileLabel]) && !isset($value[0][$termLabel])) {
+
+			$value = $value[0];
+
+			// loop through our prefered labels until we find a match
+			foreach ($textLabels as $label) {
+				if (isset($value[$label])) {
+					return $value[$label];
+				}
+			}
+
+		// file(s)
+		} elseif (isset($value[0]["fid"])) {
+			$files = array();
+			foreach($value as $k => $v) {
+				$files[] = $v["fid"];
+			}
+			return $files;
+
+		// image(s)
+		} elseif (isset($value[0]["tid"])) {
+			$terms = array();
+			foreach($value as $k => $v) {
+				$terms[] = $v["tid"];
+			}
+			return $terms;
+		} else {
+			return "we missed something.";
+		}
     }
 }
