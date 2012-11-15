@@ -8,12 +8,14 @@ class HTTP
 	protected $endpoint;
 	protected $queryStringParams = array();
 	protected $request;
-	protected $requestCacheKey;
+	protected $headerConstants = array();
+	protected $headers = array();
 	protected $response;
 
-	public function __construct($engine)
+	public function __construct($engine, $headerConstants = array())
 	{
 		$this->engine = $engine;
+		$this->headerConstants = $headerConstants;
 	}
 
 	/**
@@ -44,55 +46,37 @@ class HTTP
 
 	public function addQueryStringParam($key, $value)
 	{
-		$this->queryStringParams[] = "{$key}={$value}";
+		$this->queryStringParams[$key] = $value;
 		return $this;
 	}
 
 
 	public function get()
 	{
-		$this->request = $cacheKey = $this->endpoint;
-		if (!empty($this->queryStringParams)) {
-			$this->request .= "?" . implode("&", $this->queryStringParams);
-			asort($this->queryStringParams);
-			$cacheKey .= "?" . implode("&", $this->queryStringParams);
+		$this->request = $this->endpoint;
+	
+		$this->response = $this->engine->get($this->request, $this->queryStringParams, $this->getHeaders());
+		$this->response = $this->response["body"];
+
+		$body = $this->response;
+
+		if (is_object($body) && get_class($body) == "SimpleXMLElement") {
+			$body = $body->asXML();
 		}
 
-		$this->requestCacheKey = md5($cacheKey);
-
-		$cached = $this->requestIsCached();
-
-		if ($cached !== false) {
-			if (is_string($cached) && substr($cached, 0, 5) == "<?xml") {
-				$cached = simplexml_load_string($cached);
-			} 
-			$this->response = $cached;
-
-		} else {
-			$this->response = $this->engine->get($this->request);
-			$this->response = $this->response["body"];
-			$body = $this->response;
-
-			if (is_object($body) && get_class($body) == "SimpleXMLElement") {
-				$body = $body->asXML();
-			}
-
-			$this->cache($body);
-		}
+		$this->queryStringParams = array();
 
 		return $this->response;
 	}
 
-
-	public function requestIsCached()
+	protected function getHeaders()
 	{
-		return apc_fetch($this->requestCacheKey);
+		return $this->headers + $this->headerConstants;
 	}
 
-
-	public function cache($result)
+	public function clearHeaders()
 	{
-		return apc_store($this->requestCacheKey, $result, 120);
+		$this->headers = array();
 	}
 
 
