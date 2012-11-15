@@ -82,6 +82,9 @@ class Model
 	public $data = array();
 
 
+	public $apiVersion = 1;
+
+
 	public function __construct($options = array())
 	{
 		// Router set up
@@ -105,7 +108,13 @@ class Model
 		$this->pdo = Database::connect();
 
 		// HTTP worker set up
-		$this->http = new HTTP(new Resty());
+		$this->http = new HTTP(new Resty(), array("Accept" => "vnd.hub+json; v=1"));
+
+		// Add our hub-flavored JSON content type
+		Resty::$JSON_TYPES[] = "vnd.hub+json";
+
+		// Add our hub-flavored XML content type
+		Resty::$XML_TYPES[] = "vnd.hub+xml";
 
 		// Cache worker set up
 		$this->cache = new Cache();
