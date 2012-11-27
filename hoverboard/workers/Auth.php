@@ -9,7 +9,7 @@ class Auth
 
 	public static function check($redirect = "/manager/login")
 	{
-		$users = new \app\models\Users();
+		$users = new \storefront\app\models\Users();
 		$router = Router::getInstance();
 		$matchedRoute = $router->request()->getResourceUri();
 
