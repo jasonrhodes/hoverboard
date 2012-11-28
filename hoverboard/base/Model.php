@@ -8,7 +8,6 @@ use \hoverboard\workers\Cache;
 use \hoverboard\workers\Router;
 use \hoverboard\workers\Messages;
 use \hoverboard\workers\Logger;
-use \hoverboard\workers\Sentry;
 use \Resty;
 
 class Model
@@ -92,9 +91,6 @@ class Model
 
 		// Get logger instance
 		$this->log = Logger::getInstance();
-
-		// Get Sentry logger instance
-		$this->sentry = Sentry::getInstance();
 
 		foreach ($options as $key => $value) {
 			$this->$key = $value;

@@ -4,7 +4,6 @@ namespace hoverboard\base;
 use \hoverboard\base\View;
 use \hoverboard\workers\Router;
 use \hoverboard\workers\Logger;
-use \hoverboard\workers\Sentry;
 
 class Controller
 {
@@ -21,9 +20,6 @@ class Controller
 		$this->id = isset($options["id"]) ? $options["id"] : null;
 
 		$this->log = Logger::getInstance();
-
-		// Get Sentry logger instance
-		// $this->sentry = Sentry::getInstance();
 
 		$this->objectName = str_replace("storefront\\app\\controllers\\", "", substr(get_called_class(), 0, -10));
 		$modelName = "\\storefront\\app\\models\\" . $this->objectName;
