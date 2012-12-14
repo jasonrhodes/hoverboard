@@ -178,7 +178,7 @@ class Model
 			$values[] = $value;
 		}
 
-		$sql = "UPDATE {$this->tableName} SET " . implode(", ", $columns) . " WHERE id = {$id} AND deleted = 0";
+		$sql = "UPDATE {$this->tableName} SET " . implode(", ", $columns) . " WHERE id = {$id}";
 
 		$this->pdoPrepared = $this->pdo->prepare($sql);
 		return $this->pdoPrepared->execute($values);
