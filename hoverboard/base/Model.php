@@ -104,13 +104,7 @@ class Model
 		$this->pdo = Database::connect();
 
 		// HTTP worker set up
-		$this->http = new HTTP(new Resty(), array("Accept" => "vnd.hub+json; v=1"));
-
-		// Add our hub-flavored JSON content type
-		Resty::$JSON_TYPES[] = "vnd.hub+json";
-
-		// Add our hub-flavored XML content type
-		Resty::$XML_TYPES[] = "vnd.hub+xml";
+		$this->http = new HTTP(new Resty(), array("Accept" => "application/json", "X_API_VERSION" => 1));
 
 		// Cache worker set up
 		$this->cache = new Cache();
