@@ -106,6 +106,10 @@ class Model
 		// HTTP worker set up
 		$this->http = new HTTP(new Resty(), array("Accept" => "application/json", "X_API_VERSION" => 1));
 
+		// Add HAL content types
+		Resty::$JSON_TYPES[] = "application/hal+json";
+		Resty::$XML_TYPES[] = "application/hal+xml";
+
 		// Cache worker set up
 		$this->cache = new Cache();
 
