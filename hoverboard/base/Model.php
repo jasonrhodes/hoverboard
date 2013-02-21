@@ -104,7 +104,7 @@ class Model
 		$this->pdo = Database::connect();
 
 		// HTTP worker set up
-		$this->http = new HTTP(new Resty(), array("Accept" => "application/json", "X_API_VERSION" => 1));
+		$this->http = new HTTP(new Resty(), array("Accept" => "application/json", "X_API_VERSION" => 0));
 
 		// Add HAL content types
 		Resty::$JSON_TYPES[] = "application/hal+json";
